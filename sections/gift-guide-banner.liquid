@@ -1,249 +1,54 @@
-<section class="gift-guide-banner">
-  <div class="gift-guide-banner__bg">
+<section class="gift-guide-section">
+  <div class="gift-guide-wrapper" 
+       style="background-color: {{ section.settings.bg_color }};">
+
     {% if section.settings.bg_image != blank %}
-      <img
-        src="{{ section.settings.bg_image | image_url: width: 2200 }}"
-        alt="{{ section.settings.heading }}"
-        loading="lazy"
-      >
-    {% endif %}
-  </div>
-
-  <div class="page-width">
-    <div class="gift-guide-banner__content">
-
-      <h2 class="gift-guide-banner__heading">
-        {{ section.settings.heading }}
-      </h2>
-
-      <div class="gift-guide-banner__text">
-        {{ section.settings.text }}
+      <div class="gift-guide-bg">
+        <img 
+          src="{{ section.settings.bg_image | image_url: width: 2200 }}" 
+          alt="{{ section.settings.heading }}"
+          loading="lazy"
+        >
       </div>
+    {% endif %}
 
-      {% if section.settings.button_label != blank %}
-        <a href="{{ section.settings.button_link }}" class="gift-guide-banner__btn">
+    <div class="page-width">
+      <div class="gift-guide-content">
+        
+        <h2 style="color: {{ section.settings.text_color }};">
+          {{ section.settings.heading }}
+        </h2>
 
-          <span class="btn-label">
-            {{ section.settings.button_label }}
-          </span>
+        <div class="gift-guide-text" style="color: {{ section.settings.text_color }};">
+          {{ section.settings.text | newline_to_br }}
+        </div>
 
-          <span class="btn-arrow">
-            <svg width="31" height="12" viewBox="0 0 31 12" fill="none">
+        {% if section.settings.button_label != blank %}
+          <a href="{{ section.settings.button_link }}" class="gift-guide-btn">
+            <span>{{ section.settings.button_label }}</span>
+
+            <svg width="30" height="12" viewBox="0 0 30 12" fill="none">
               <path d="M1 6H28" stroke="white" stroke-width="1.5"/>
               <path d="M23 1L28 6L23 11" stroke="white" stroke-width="1.5"/>
             </svg>
-          </span>
+          </a>
+        {% endif %}
 
-        </a>
-      {% endif %}
-
+      </div>
     </div>
-  </div>
 
-  <div class="gift-guide-banner__bottom">
-    {{ section.settings.bottom_text }}
+    <div class="gift-guide-bottom-strip">
+      {{ section.settings.bottom_text }}
+    </div>
+
   </div>
 </section>
 
-<style>
-.gift-guide-banner{
-  position:relative;
-  overflow:hidden;
-  background:#e7e7e7;
-}
-
-.gift-guide-banner__bg{
-  position:absolute;
-  inset:0;
-  z-index:1;
-}
-
-.gift-guide-banner__bg img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
-
-.gift-guide-banner .page-width{
-  position:relative;
-  z-index:2;
-}
-
-.gift-guide-banner__content{
-  padding-top:138px;
-  padding-bottom:138px;
-  max-width:530px;
-  min-height:525px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-
-.gift-guide-banner__heading{
-  margin:0;
-  font-size:82px;
-  line-height:0.95;
-  font-weight:700;
-  letter-spacing:-3px;
-  color:#000;
-}
-
-.gift-guide-banner__text{
-  margin-top:42px;
-  max-width:470px;
-
-  font-size:20px;
-  line-height:1.55;
-  font-weight:400;
-  color:#111;
-}
-
-.gift-guide-banner__btn{
-  margin-top:52px;
-
-  width:220px;
-  height:58px;
-
-  background:#000;
-  color:#fff;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:18px;
-
-  text-decoration:none;
-
-  font-size:17px;
-  font-weight:500;
-  letter-spacing:0.8px;
-
-  position:relative;
-  overflow:hidden;
-
-  transition:
-    background .35s ease,
-    transform .35s ease;
-}
-
-.gift-guide-banner__btn:before{
-  content:"";
-  position:absolute;
-  top:0;
-  left:-120%;
-  width:120%;
-  height:100%;
-
-  background:linear-gradient(
-    90deg,
-    transparent,
-    rgba(255,255,255,.18),
-    transparent
-  );
-
-  transition:left .7s ease;
-}
-
-.gift-guide-banner__btn:hover:before{
-  left:120%;
-}
-
-.gift-guide-banner__btn:hover{
-  background:#111;
-}
-
-.btn-arrow{
-  display:flex;
-  align-items:center;
-
-  transition:transform .35s cubic-bezier(.4,0,.2,1);
-}
-
-.gift-guide-banner__btn:hover .btn-arrow{
-  transform:translateX(6px);
-}
-
-.gift-guide-banner__bottom{
-  position:relative;
-  z-index:2;
-
-  height:30px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  background:#dfdfdf;
-
-  font-size:15px;
-  font-weight:500;
-  letter-spacing:.6px;
-  text-transform:uppercase;
-  color:#000;
-}
-
-@media screen and (max-width: 1200px){
-
-  .gift-guide-banner__heading{
-    font-size:68px;
-  }
-
-  .gift-guide-banner__content{
-    padding-top:100px;
-    padding-bottom:100px;
-  }
-
-}
-
-@media screen and (max-width: 767px){
-
-  .gift-guide-banner__content{
-    min-height:auto;
-    padding-top:70px;
-    padding-bottom:70px;
-    max-width:100%;
-  }
-
-  .gift-guide-banner__heading{
-    font-size:46px;
-    letter-spacing:-1.5px;
-  }
-
-  .gift-guide-banner__text{
-    margin-top:24px;
-    font-size:16px;
-    line-height:1.6;
-  }
-
-  .gift-guide-banner__btn{
-    margin-top:36px;
-    width:200px;
-    height:54px;
-    font-size:15px;
-  }
-
-  .gift-guide-banner__bottom{
-    height:auto;
-    min-height:36px;
-    padding:8px 15px;
-    text-align:center;
-    font-size:12px;
-    line-height:1.4;
-  }
-
-}
-</style>
 
 {% schema %}
 {
   "name": "Gift Guide Banner",
   "settings": [
-    {
-      "type": "image_picker",
-      "id": "bg_image",
-      "label": "Background Image"
-    },
     {
       "type": "text",
       "id": "heading",
@@ -254,7 +59,7 @@
       "type": "textarea",
       "id": "text",
       "label": "Description",
-      "default": "Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season."
+      "default": "Discover Joy: Your Ultimate Holiday Gift Destination.\nExplore our curated selection and find the perfect gifts to delight your loved ones this holiday season."
     },
     {
       "type": "text",
@@ -268,10 +73,27 @@
       "label": "Button Link"
     },
     {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
       "type": "text",
       "id": "bottom_text",
       "label": "Bottom Strip Text",
       "default": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#e8e8e8"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
     }
   ],
   "presets": [
@@ -281,3 +103,154 @@
   ]
 }
 {% endschema %}
+
+
+<style>
+.gift-guide-section {
+  width: 100%;
+  overflow: hidden;
+}
+
+.gift-guide-wrapper {
+  position: relative;
+  min-height: 525px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.gift-guide-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.gift-guide-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.gift-guide-wrapper .page-width {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.gift-guide-content {
+  max-width: 480px;
+  padding: 80px 50px 80px 50px;
+}
+
+.gift-guide-content h2 {
+  font-size: 72px;
+  line-height: 1;
+  font-weight: 700;
+  margin: 0 0 28px;
+  letter-spacing: -2px;
+}
+
+.gift-guide-text {
+  font-size: 19px;
+  line-height: 1.55;
+  font-weight: 400;
+  margin-bottom: 45px;
+}
+
+.gift-guide-btn {
+  width: 220px;
+  height: 58px;
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: all .25s ease;
+}
+
+.gift-guide-btn:hover {
+  background: #222;
+}
+
+.gift-guide-btn svg {
+  transition: transform .25s ease;
+}
+
+.gift-guide-btn:hover svg {
+  transform: translateX(4px);
+}
+
+.gift-guide-bottom-strip {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  background: #dedede;
+  text-align: center;
+  padding: 12px 20px;
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: #000;
+  text-transform: uppercase;
+}
+
+@media screen and (max-width: 1200px) {
+  .gift-guide-content h2 {
+    font-size: 60px;
+  }
+
+  .gift-guide-text {
+    font-size: 17px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .gift-guide-wrapper {
+    min-height: auto;
+  }
+
+  .gift-guide-bg img {
+    object-position: center right;
+  }
+
+  .gift-guide-content {
+    max-width: 100%;
+    padding: 70px 0 60px;
+  }
+
+  .gift-guide-content h2 {
+    font-size: 42px;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+  }
+
+  .gift-guide-text {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  .gift-guide-btn {
+    width: 200px;
+    height: 54px;
+    font-size: 16px;
+  }
+
+  .gift-guide-bottom-strip {
+    font-size: 13px;
+    padding: 10px 15px;
+  }
+}
+</style>

@@ -1,17 +1,28 @@
 {% comment %}
-  Announcement Bar Section
+  Tisso Vision Announcement Bar
 {% endcomment %}
 
 <section class="tisso-announcement-bar">
 
+  <!-- LEFT LOGO IMAGE -->
   <div class="tisso-announcement-left">
-    {{ section.settings.logo_text }}
+
+    {% if section.settings.logo_image != blank %}
+      <img 
+        src="{{ section.settings.logo_image | image_url }}" 
+        alt="Logo"
+        class="tisso-logo"
+      >
+    {% endif %}
+
   </div>
 
+  <!-- CENTER TEXT -->
   <div class="tisso-announcement-center">
     {{ section.settings.message_text }}
   </div>
 
+  <!-- RIGHT BUTTON -->
   <a href="{{ section.settings.button_link }}" class="tisso-announcement-button">
     <span>{{ section.settings.button_text }}</span>
     <span class="arrow">→</span>
@@ -30,18 +41,19 @@
   justify-content:space-between;
   position:relative;
   overflow:hidden;
-  font-family:Arial, sans-serif;
 }
 
 /* LEFT LOGO */
 .tisso-announcement-left{
   padding-left:50px;
-  font-size:20px;
-  font-weight:700;
-  letter-spacing:1px;
-  color:#000;
-  text-transform:uppercase;
-  white-space:nowrap;
+  display:flex;
+  align-items:center;
+}
+
+.tisso-logo{
+  max-height:28px;
+  width:auto;
+  display:block;
 }
 
 /* CENTER TEXT */
@@ -54,6 +66,7 @@
   font-weight:400;
   color:#111;
   white-space:nowrap;
+  font-family:Arial, sans-serif;
 }
 
 /* RIGHT BUTTON */
@@ -79,6 +92,7 @@
   font-weight:700;
   color:#000;
   letter-spacing:0.5px;
+  font-family:Arial, sans-serif;
 }
 
 .tisso-announcement-button .arrow{
@@ -120,13 +134,12 @@
 
 {% schema %}
 {
-  "name": "Dev Header",
+  "name": "Tisso Announcement Bar",
   "settings": [
     {
-      "type": "text",
-      "id": "logo_text",
-      "label": "Logo Text",
-      "default": "TISSO VISION"
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo Image"
     },
     {
       "type": "text",
@@ -148,7 +161,7 @@
   ],
   "presets": [
     {
-      "name": "Dev Header"
+      "name": "Tisso Announcement Bar"
     }
   ]
 }

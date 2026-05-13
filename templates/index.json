@@ -13,7 +13,7 @@
       "type": "dev-header",
       "name": "Dev Header",
       "settings": {
-        "logo_text": "TISSO VISION",
+        "logo_image": "shopify://shop_images/Screenshot.png",
         "message_text": "Find the ideal gift for your loved ones.",
         "button_text": "CHOOSE GIFT",
         "button_link": "shopify://pages/contact"

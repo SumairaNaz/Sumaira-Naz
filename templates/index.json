@@ -9,6 +9,16 @@
  */
 {
   "sections": {
+    "dev_header_Q7jDwE": {
+      "type": "dev-header",
+      "name": "Dev Header",
+      "settings": {
+        "logo_text": "TISSO VISION",
+        "message_text": "Find the ideal gift for your loved ones.",
+        "button_text": "CHOOSE GIFT",
+        "button_link": "shopify://pages/contact"
+      }
+    },
     "gift_guide_banner_Dm7bbA": {
       "type": "gift-guide-banner",
       "name": "Gift Guide Banner",
@@ -25,6 +35,7 @@
     }
   },
   "order": [
+    "dev_header_Q7jDwE",
     "gift_guide_banner_Dm7bbA"
   ]
 }

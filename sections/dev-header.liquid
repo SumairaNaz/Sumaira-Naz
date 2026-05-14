@@ -90,6 +90,19 @@
     font-weight: 400;
     letter-spacing: 0;
 }
+.tisso-announcement-button::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease-in-out;
+  z-index:-1;
+}
+.tisso-announcement-button:hover::before {
+  transform: scaleX(1);
+}
 
 .tisso-announcement-button .arrow{
   font-size:20px;

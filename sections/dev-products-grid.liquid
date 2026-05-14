@@ -103,6 +103,17 @@
 
 </div>
 
+<script type="application/json" class="product-json">
+  {
+    "id": {{ product.id }},
+    "title": {{ product.title | json }},
+    "description": {{ product.description | strip_html | json }},
+    "featured_image": {{ product.featured_image | image_url: width: 900 | json }},
+    "options_with_values": {{ product.options_with_values | json }},
+    "variants": {{ product.variants | json }}
+  }
+</script>
+
 <style>
 
 /* =========================

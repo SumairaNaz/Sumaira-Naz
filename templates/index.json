@@ -33,10 +33,29 @@
         "bg_color": "#f5f5f5",
         "text_color": "#000000"
       }
+    },
+    "dev_products_grid_fVFkiJ": {
+      "type": "dev-products-grid",
+      "blocks": {
+        "product_FCdG3n": {
+          "type": "product",
+          "settings": {
+            "product": "black-leather-bag"
+          }
+        }
+      },
+      "block_order": [
+        "product_FCdG3n"
+      ],
+      "name": "Dev Products Grid",
+      "settings": {
+        "heading": "Tisso vision in the wild"
+      }
     }
   },
   "order": [
     "dev_header_Q7jDwE",
-    "gift_guide_banner_Dm7bbA"
+    "gift_guide_banner_Dm7bbA",
+    "dev_products_grid_fVFkiJ"
   ]
 }

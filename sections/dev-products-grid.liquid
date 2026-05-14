@@ -27,6 +27,12 @@
               alt=""
               class="tisso-lookbook-image"
             >
+            {% else %}
+                <img
+                src="{{ product.featured_image | image_url: width: 1000 }}"
+                alt=""
+                class="tisso-lookbook-image"
+                >
           {% endif %}
 
           <!-- Plus Button -->

@@ -433,13 +433,17 @@
 
 @media(max-width:768px){
 
-  .tisso-lookbook-grid{
-    grid-template-columns:1fr;
-  }
+  .tisso-lookbook-grid {
+        grid-template-columns: repeat(2,1fr);
+        gap: 4px;
+    }
     .tisso-lookbook-heading {
         font-size: 24px;
         margin-bottom: 20px;
         text-align: center;
+    }
+    .tisso-lookbook-item {
+        height: 186px;
     }
 
   .tisso-product-popup{

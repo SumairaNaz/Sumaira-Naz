@@ -91,17 +91,18 @@
     letter-spacing: 0;
 }
 .tisso-announcement-button::before{
-  content: "";
+   content: "";
   position: absolute;
-  inset: 0;
-  background: #fff;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.3s ease-in-out;
-  z-index:-1;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background: #000;
+  transition: width 0.4s ease-in-out;
+  z-index: -1;
 }
 .tisso-announcement-button:hover::before {
-  transform: scaleX(1);
+  width:100%;
 }
 
 .tisso-announcement-button .arrow{

@@ -471,58 +471,44 @@ document.addEventListener('DOMContentLoaded', () => {
      RENDER POPUP
   ========================= */
 
-  function renderPopup(product){
+  function renderPopup(product) {
 
     popupImage.src = product.featured_image;
+    popupTitle.textContent = product.title;
+    popupDescription.textContent = product.description;
 
-    popupTitle.innerHTML = product.title;
+    const variants = product.variants || [];
 
-    popupDescription.innerHTML = product.description;
-
-    const firstVariant = product.variants[0];
+    const firstVariant = variants[0];
 
     selectedVariantId = firstVariant.id;
 
     popupPrice.innerHTML = formatMoney(firstVariant.price);
 
-    /* =========================
-       RESET
-    ========================= */
-
     variantWrapper.innerHTML = '';
     sizeWrapper.innerHTML = '';
 
-    /* =========================
-       OPTIONS
-    ========================= */
-
     const options = product.options_with_values || [];
 
-    const colorOption = product.options_with_values.find(
-    o => o.name.toLowerCase().includes('color')
-    );
-
-    const sizeOption = options.find(
-      option => option.name.toLowerCase() === 'size'
-    );
-
     /* =========================
-       COLOR BUTTONS
+       COLOR
     ========================= */
 
-    if(colorOption){
+    const colorOption = options.find(
+      o => (o.name || '').toLowerCase().includes('color')
+    );
 
-      selectedColor = colorOption.values[0];
+    if (colorOption) {
+
+      const uniqueColors = [...new Set(colorOption.values || [])];
+
+      selectedColor = uniqueColors[0];
 
       let colorHTML = `
-        <label class="tisso-option-title">
-          Color
-        </label>
-
         <div class="tisso-variant-options">
       `;
-      const uniqueColors = [...new Set(colorOption.values)];
-      uniqueColors.forEach(color => {
+
+      uniqueColors.forEach((color, index) => {
 
         colorHTML += `
           <button
@@ -536,19 +522,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       });
 
-      colorHTML += `
-        </div>
-      `;
+      colorHTML += `</div>`;
 
       variantWrapper.innerHTML = colorHTML;
 
-      document.querySelectorAll('.tisso-variant-btn')
-      .forEach(btn => {
+      document.querySelectorAll('.tisso-variant-btn').forEach(btn => {
 
         btn.addEventListener('click', () => {
 
           document.querySelectorAll('.tisso-variant-btn')
-          .forEach(item => item.classList.remove('active'));
+            .forEach(b => b.classList.remove('active'));
 
           btn.classList.add('active');
 
@@ -563,135 +546,140 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* =========================
-       SIZE DROPDOWN
+       SIZE
     ========================= */
+
+    const sizeOption = options.find(
+      o => (o.name || '').toLowerCase().includes('size')
+    );
 
     if (sizeOption) {
 
-  selectedSize = sizeOption.values[0];
+      selectedSize = sizeOption.values[0];
 
-  let sizeHTML = `
-    <div class="tisso-custom-select">
+      let sizeHTML = `
+        <div class="tisso-custom-select">
 
-      <div class="tisso-select-head">
-        <span class="tisso-select-label">Choose your size</span>
+          <div class="tisso-select-head">
+            <span class="tisso-select-label">Choose your size</span>
 
-        <div class="tisso-right">
-          <span class="tisso-selected-value">${selectedSize}</span>
-          <span class="tisso-arrow">›</span>
+            <div class="tisso-right">
+              <span class="tisso-selected-value">${selectedSize}</span>
+              <span class="tisso-arrow">›</span>
+            </div>
+          </div>
+
+          <div class="tisso-select-dropdown">
+      `;
+
+      sizeOption.values.forEach(size => {
+
+        sizeHTML += `
+          <div class="tisso-select-item" data-value="${size}">
+            ${size}
+          </div>
+        `;
+
+      });
+
+      sizeHTML += `
+          </div>
         </div>
-      </div>
+      `;
 
-      <div class="tisso-select-dropdown">
-  `;
+      sizeWrapper.innerHTML = sizeHTML;
 
-  sizeOption.values.forEach(size => {
+      const dropdown = document.querySelector('.tisso-select-dropdown');
+      const head = document.querySelector('.tisso-select-head');
+      const valueEl = document.querySelector('.tisso-selected-value');
 
-    sizeHTML += `
-      <div class="tisso-select-item" data-value="${size}">
-        ${size}
-      </div>
-    `;
+      head.addEventListener('click', () => {
+        dropdown.classList.toggle('active');
+      });
 
-  });
+      document.querySelectorAll('.tisso-select-item').forEach(item => {
 
-  sizeHTML += `
-      </div>
-    </div>
-  `;
+        item.addEventListener('click', () => {
 
-  sizeWrapper.innerHTML = sizeHTML;
+          selectedSize = item.dataset.value;
+          valueEl.textContent = selectedSize;
 
-  const dropdown = document.querySelector('.tisso-select-dropdown');
-  const head = document.querySelector('.tisso-select-head');
-  const valueEl = document.querySelector('.tisso-selected-value');
+          dropdown.classList.remove('active');
 
-  head.addEventListener('click', () => {
-    dropdown.classList.toggle('active');
-  });
+          updateVariant();
 
-  document.querySelectorAll('.tisso-select-item').forEach(item => {
+        });
 
-    item.addEventListener('click', () => {
+      });
 
-      selectedSize = item.dataset.value;
-      valueEl.textContent = selectedSize;
-
-      dropdown.classList.remove('active');
-      updateVariant();
-
-    });
-
-  });
-
-}
+    }
 
     updateVariant();
 
   }
 
   /* =========================
-     UPDATE VARIANT
+     UPDATE VARIANT (FIXED)
   ========================= */
 
-function updateVariant() {
+  function updateVariant() {
 
-  if (!currentProduct) return;
+    if (!currentProduct) return;
 
-  const variants = currentProduct.variants || [];
+    const variants = currentProduct.variants || [];
 
-  const normalize = (v) => (v || '').toString().toLowerCase().trim();
+    const normalize = (v) =>
+      (v || '').toString().toLowerCase().trim();
 
-  const color = normalize(selectedColor);
-  const size = normalize(selectedSize);
+    const color = normalize(selectedColor);
+    const size = normalize(selectedSize);
 
-  let matchedVariant = null;
+    let matchedVariant = null;
 
-  matchedVariant = variants.find(variant => {
+    for (let i = 0; i < variants.length; i++) {
 
-    const options = [
-      normalize(variant.option1),
-      normalize(variant.option2),
-      normalize(variant.option3)
-    ];
+      const v = variants[i];
 
-    /* ---------------------------
-       MATCH COLOR + SIZE
-    --------------------------- */
-    if (color && size) {
-      return options.includes(color) && options.includes(size);
+      const options = [
+        normalize(v.option1),
+        normalize(v.option2),
+        normalize(v.option3)
+      ];
+
+      if (color && size) {
+        if (options.includes(color) && options.includes(size)) {
+          matchedVariant = v;
+          break;
+        }
+      }
+
+      else if (color) {
+        if (options.includes(color)) {
+          matchedVariant = v;
+          break;
+        }
+      }
+
+      else if (size) {
+        if (options.includes(size)) {
+          matchedVariant = v;
+          break;
+        }
+      }
     }
 
-    /* ---------------------------
-       MATCH ONLY COLOR
-    --------------------------- */
-    if (color) {
-      return options.includes(color);
+    if (!matchedVariant) {
+      matchedVariant = variants[0];
     }
 
-    /* ---------------------------
-       MATCH ONLY SIZE
-    --------------------------- */
-    if (size) {
-      return options.includes(size);
+    selectedVariantId = matchedVariant.id;
+
+    popupPrice.innerHTML = formatMoney(matchedVariant.price);
+
+    if (matchedVariant.featured_image) {
+      popupImage.src = matchedVariant.featured_image.src;
     }
-
-    return false;
-  });
-
-  /* fallback */
-  if (!matchedVariant) {
-    matchedVariant = variants[0];
   }
-
-  selectedVariantId = matchedVariant.id;
-
-  popupPrice.innerHTML = formatMoney(matchedVariant.price);
-
-  if (matchedVariant.featured_image) {
-    popupImage.src = matchedVariant.featured_image.src;
-  }
-}
 
   /* =========================
      ADD TO CART
@@ -699,32 +687,26 @@ function updateVariant() {
 
   addCartBtn.addEventListener('click', async () => {
 
-    if(!selectedVariantId) return;
+    if (!selectedVariantId) return;
 
     addCartBtn.disabled = true;
 
     try {
 
-      const response = await fetch('/cart/add.js', {
-
-        method:'POST',
-
-        headers:{
-          'Content-Type':'application/json'
+      const res = await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
         },
-
-        body:JSON.stringify({
-          id:selectedVariantId,
-          quantity:1
+        body: JSON.stringify({
+          id: selectedVariantId,
+          quantity: 1
         })
-
       });
 
-      if(response.ok){
+      if (res.ok) {
 
-        addCartBtn.innerHTML = `
-          <span>ADDED ✓</span>
-        `;
+        addCartBtn.innerHTML = `<span>ADDED ✓</span>`;
 
         setTimeout(() => {
 
@@ -735,48 +717,38 @@ function updateVariant() {
 
           addCartBtn.disabled = false;
 
-        },2000);
+        }, 2000);
 
       }
 
-    } catch(error){
-
-      console.log(error);
-
+    } catch (err) {
+      console.log(err);
       addCartBtn.disabled = false;
-
     }
 
   });
 
   /* =========================
-     CLOSE POPUP
+     CLOSE
   ========================= */
 
   closeBtn.addEventListener('click', closePopup);
-
   overlay.addEventListener('click', closePopup);
 
-  function closePopup(){
-
+  function closePopup() {
     popup.classList.remove('active');
     overlay.classList.remove('active');
-
   }
 
   /* =========================
-     MONEY FORMAT
+     MONEY
   ========================= */
 
-  function formatMoney(price){
-
+  function formatMoney(price) {
     return new Intl.NumberFormat('en-US', {
-
-      style:'currency',
-      currency:'USD'
-
+      style: 'currency',
+      currency: 'USD'
     }).format(price / 100);
-
   }
 
 });

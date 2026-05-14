@@ -78,7 +78,6 @@
     transition: color 0.3s ease-in-out;
     flex-shrink: 0;
     font-size: 16px;
-    overflow:hidden;
 }
 
 .tisso-announcement-button:hover{
@@ -90,20 +89,6 @@
     font-size: 16px;
     font-weight: 400;
     letter-spacing: 0;
-}
-.tisso-announcement-button::before{
-   content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0%;
-  height: 100%;
-  background: #000;
-  transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-  z-index: -1;
-}
-.tisso-announcement-button:hover::before {
-  width:100%;
 }
 
 .tisso-announcement-button .arrow{

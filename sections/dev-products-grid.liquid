@@ -372,10 +372,10 @@ document.addEventListener('DOMContentLoaded', function(){
 
       popupImage.src = productData.featured_image;
       popupTitle.innerHTML = productData.title;
-      popupPrice.innerHTML = new Intl.NumberFormat('de-DE', {
+      popupPrice.innerHTML = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'EUR'
-        }).format(productData.price / 100);
+        currency: 'USD'
+     }).format(productData.price / 100);
 
       popupDescription.innerHTML = productData.description;
 

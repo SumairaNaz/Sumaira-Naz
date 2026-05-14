@@ -498,8 +498,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const options = product.options_with_values || [];
 
-    const colorOption = options.find(
-      option => option.name.toLowerCase() === 'color'
+    const colorOption = product.options_with_values.find(
+    o => o.name.toLowerCase().includes('color')
     );
 
     const sizeOption = options.find(
@@ -521,8 +521,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <div class="tisso-variant-options">
       `;
-
-      colorOption.values.forEach((color, index) => {
+      const uniqueColors = [...new Set(colorOption.values)];
+      uniqueColors.forEach(color => {
 
         colorHTML += `
           <button

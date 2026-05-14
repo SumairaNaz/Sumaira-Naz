@@ -172,11 +172,21 @@
     font-size: 16px;
     line-height: 20.48px;
     /* letter-spacing: 0.5px; */
-    transition: all .25s ease;
+    transition: background-size .45s cubic-bezier(.785,.135,.15,.86),background-position .45s step-end,color .45s cubic-bezier(.785,.135,.15,.86),border .45s cubic-bezier(.785,.135,.15,.86);
+     --initial-gradient: linear-gradient(#000, #000);
+    --hover-gradient: linear-gradient(#FFF544, #FFF544);
+    --initial-background-position: left;
+    --hover-background-position: right;
+    background-image: var(--initial-gradient),var(--hover-gradient);
+    background-size: 101% 101%,0 101%;
+    background-position: right;
+    background-repeat: no-repeat;
 }
 
 .gift-guide-btn:hover {
-  background: #222;
+    color: #000;
+    background-size: 0 101%,101% 101%;
+    background-position: var(--hover-background-position);
 }
 
 .gift-guide-btn svg {

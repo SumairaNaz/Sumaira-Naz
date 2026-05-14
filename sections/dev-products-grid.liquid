@@ -507,44 +507,45 @@ document.addEventListener('DOMContentLoaded', () => {
        SIZE DROPDOWN
     ========================= */
 
-    if(sizeOption){
+    if (sizeOption) {
 
-      selectedSize = sizeOption.values[0];
+  selectedSize = sizeOption.values[0];
 
-      let sizeHTML = `
-        <label class="tisso-option-title">
-          Size
-        </label>
+  let sizeHTML = `
+    <div class="tisso-size-block">
 
-        <select class="tisso-size-select">
-      `;
+      <div class="tisso-option-title">
+        Choose your size
+      </div>
 
-      sizeOption.values.forEach(size => {
+      <select class="tisso-size-select">
+  `;
 
-        sizeHTML += `
-          <option value="${size}">
-            ${size}
-          </option>
-        `;
+  sizeOption.values.forEach(size => {
 
-      });
+    sizeHTML += `
+      <option value="${size}">
+        ${size}
+      </option>
+    `;
 
-      sizeHTML += `
-        </select>
-      `;
+  });
 
-      sizeWrapper.innerHTML = sizeHTML;
+  sizeHTML += `
+      </select>
 
-      document.querySelector('.tisso-size-select')
-      .addEventListener('change', e => {
+    </div>
+  `;
 
-        selectedSize = e.target.value;
+  sizeWrapper.innerHTML = sizeHTML;
 
-        updateVariant();
+  document.querySelector('.tisso-size-select')
+  .addEventListener('change', e => {
+    selectedSize = e.target.value;
+    updateVariant();
+  });
 
-      });
-
-    }
+}
 
     updateVariant();
 

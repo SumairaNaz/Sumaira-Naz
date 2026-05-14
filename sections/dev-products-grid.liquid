@@ -102,16 +102,6 @@
       <div class="tisso-popup-price"></div>
 
       <div class="tisso-popup-description"></div>
-      <div class="tisso-variant-wrapper"></div>
-
-      <!-- Size -->
-      <div class="tisso-size-wrapper"></div>
-
-      <!-- Add to Cart -->
-      <button class="tisso-add-cart">
-        <span>ADD TO CART</span>
-        <span>→</span>
-      </button>
 
     </div>
 
@@ -650,40 +640,46 @@ function updateVariant() {
 
   const variants = currentProduct.variants || [];
 
-  let matchedVariant = null;
-
-  /* Normalize helper */
-  const normalize = (str) => (str || '').toLowerCase().trim();
+  const normalize = (v) => (v || '').toString().toLowerCase().trim();
 
   const color = normalize(selectedColor);
   const size = normalize(selectedSize);
 
-  matchedVariant = variants.find(v => {
+  let matchedVariant = null;
 
-    const v1 = normalize(v.option1);
-    const v2 = normalize(v.option2);
-    const v3 = normalize(v.option3);
+  matchedVariant = variants.find(variant => {
 
-    /* CASE 1: Color + Size */
+    const options = [
+      normalize(variant.option1),
+      normalize(variant.option2),
+      normalize(variant.option3)
+    ];
+
+    /* ---------------------------
+       MATCH COLOR + SIZE
+    --------------------------- */
     if (color && size) {
-      return (v1 === color && v2 === size) ||
-             (v1 === size && v2 === color);
+      return options.includes(color) && options.includes(size);
     }
 
-    /* CASE 2: Only Color */
+    /* ---------------------------
+       MATCH ONLY COLOR
+    --------------------------- */
     if (color) {
-      return v1 === color || v2 === color;
+      return options.includes(color);
     }
 
-    /* CASE 3: Only Size */
+    /* ---------------------------
+       MATCH ONLY SIZE
+    --------------------------- */
     if (size) {
-      return v1 === size || v2 === size;
+      return options.includes(size);
     }
 
     return false;
   });
 
-  /* Fallback (VERY IMPORTANT) */
+  /* fallback */
   if (!matchedVariant) {
     matchedVariant = variants[0];
   }

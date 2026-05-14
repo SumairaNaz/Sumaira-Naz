@@ -514,7 +514,8 @@ document.addEventListener('DOMContentLoaded', () => {
       selectedColor = uniqueColors[0];
 
       let colorHTML = `
-        <div class="tisso-variant-options">
+         <div class="tisso-option-title">Color</div>
+         <div class="tisso-variant-options">
       `;
 
       uniqueColors.forEach((color, index) => {
@@ -567,6 +568,7 @@ document.addEventListener('DOMContentLoaded', () => {
       selectedSize = sizeOption.values[0];
 
       let sizeHTML = `
+        <div class="tisso-option-title">Size</div>
         <div class="tisso-custom-select">
 
           <div class="tisso-select-head">

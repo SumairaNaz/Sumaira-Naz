@@ -554,56 +554,58 @@ document.addEventListener('DOMContentLoaded', () => {
      UPDATE VARIANT
   ========================= */
 
-  function updateVariant(){
+function updateVariant() {
 
-    if(!currentProduct) return;
+  if (!currentProduct) return;
 
-    let matchedVariant = null;
+  const variants = currentProduct.variants || [];
 
-    matchedVariant = currentProduct.variants.find(variant => {
+  let matchedVariant = null;
 
-      /* BOTH COLOR + SIZE */
+  /* Normalize helper */
+  const normalize = (str) => (str || '').toLowerCase().trim();
 
-      if(selectedColor && selectedSize){
+  const color = normalize(selectedColor);
+  const size = normalize(selectedSize);
 
-        return (
-          variant.option1 === selectedColor &&
-          variant.option2 === selectedSize
-        );
+  matchedVariant = variants.find(v => {
 
-      }
+    const v1 = normalize(v.option1);
+    const v2 = normalize(v.option2);
+    const v3 = normalize(v.option3);
 
-      /* ONLY COLOR */
-
-      if(selectedColor){
-
-        return variant.option1 === selectedColor;
-
-      }
-
-      /* ONLY SIZE */
-
-      if(selectedSize){
-
-        return variant.option1 === selectedSize;
-
-      }
-
-      return false;
-
-    });
-
-    if(matchedVariant){
-
-      selectedVariantId = matchedVariant.id;
-
-      popupPrice.innerHTML = formatMoney(
-        matchedVariant.price
-      );
-
+    /* CASE 1: Color + Size */
+    if (color && size) {
+      return (v1 === color && v2 === size) ||
+             (v1 === size && v2 === color);
     }
 
+    /* CASE 2: Only Color */
+    if (color) {
+      return v1 === color || v2 === color;
+    }
+
+    /* CASE 3: Only Size */
+    if (size) {
+      return v1 === size || v2 === size;
+    }
+
+    return false;
+  });
+
+  /* Fallback (VERY IMPORTANT) */
+  if (!matchedVariant) {
+    matchedVariant = variants[0];
   }
+
+  selectedVariantId = matchedVariant.id;
+
+  popupPrice.innerHTML = formatMoney(matchedVariant.price);
+
+  if (matchedVariant.featured_image) {
+    popupImage.src = matchedVariant.featured_image.src;
+  }
+}
 
   /* =========================
      ADD TO CART

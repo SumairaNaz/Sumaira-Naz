@@ -339,26 +339,52 @@
   gap:24px;
   font-size:24px;
 }
-.tisso-size-block{
-  margin-top:10px;
+.tisso-custom-select{
+  border:1px solid #000;
+  background:#fff;
+  position:relative;
+  font-family:inherit;
 }
 
-.tisso-option-title{
+/* TOP BAR */
+.tisso-select-head{
+  height:58px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 16px;
+  cursor:pointer;
+}
+
+.tisso-select-label{
   font-size:14px;
-  font-weight:500;
-  margin-bottom:8px;
   color:#111;
 }
 
-.tisso-size-select{
-  width:100%;
-  height:58px;
-  border:1px solid #000;
-  padding:0 14px;
+.tisso-selected-value{
   font-size:16px;
+  font-weight:500;
+}
+
+/* DROPDOWN */
+.tisso-select-dropdown{
+  display:none;
+  border-top:1px solid #000;
   background:#fff;
-  appearance:none;
+}
+
+.tisso-select-dropdown.active{
+  display:block;
+}
+
+.tisso-select-item{
+  padding:14px 16px;
   cursor:pointer;
+  font-size:15px;
+}
+
+.tisso-select-item:hover{
+  background:#f2f2f2;
 }
 
 /* MOBILE */
@@ -533,37 +559,56 @@ document.addEventListener('DOMContentLoaded', () => {
   selectedSize = sizeOption.values[0];
 
   let sizeHTML = `
-    <div class="tisso-size-block">
+    <div class="tisso-custom-select">
 
-      <div class="tisso-option-title">
-        Choose your size
+      <div class="tisso-select-head">
+        <span class="tisso-select-label">Choose your size</span>
+        <span class="tisso-selected-value">${selectedSize}</span>
       </div>
 
-      <select class="tisso-size-select">
+      <div class="tisso-select-dropdown">
   `;
 
   sizeOption.values.forEach(size => {
 
     sizeHTML += `
-      <option value="${size}">
+      <div class="tisso-select-item" data-value="${size}">
         ${size}
-      </option>
+      </div>
     `;
 
   });
 
   sizeHTML += `
-      </select>
+      </div>
 
     </div>
   `;
 
   sizeWrapper.innerHTML = sizeHTML;
 
-  document.querySelector('.tisso-size-select')
-  .addEventListener('change', e => {
-    selectedSize = e.target.value;
-    updateVariant();
+  const dropdown = document.querySelector('.tisso-select-dropdown');
+  const head = document.querySelector('.tisso-select-head');
+  const valueEl = document.querySelector('.tisso-selected-value');
+
+  /* toggle dropdown */
+  head.addEventListener('click', () => {
+    dropdown.classList.toggle('active');
+  });
+
+  /* select item */
+  document.querySelectorAll('.tisso-select-item').forEach(item => {
+
+    item.addEventListener('click', () => {
+
+      selectedSize = item.dataset.value;
+      valueEl.textContent = selectedSize;
+
+      dropdown.classList.remove('active');
+      updateVariant();
+
+    });
+
   });
 
 }

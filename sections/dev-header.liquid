@@ -69,21 +69,32 @@
 .tisso-announcement-button {
     width: 207px;
     height: 44px;
-    background: #FFF544;
+    background-color: #FFF544;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
     text-decoration: none;
-    transition: color 0.3s ease-in-out;
+    transition: background-size .45s cubic-bezier(.785,.135,.15,.86),background-position .45s step-end,color .45s cubic-bezier(.785,.135,.15,.86),border .45s cubic-bezier(.785,.135,.15,.86);
     flex-shrink: 0;
     font-size: 16px;
+    --initial-gradient: linear-gradient(rgb(28 28 28), rgb(28 28 28));
+    --hover-gradient: linear-gradient(transparent, transparent);
+    --initial-background-position: right;
+    --hover-background-position: left;
+    background-image: var(--initial-gradient),var(--hover-gradient);
+    background-size: 101% 101%,0 101%;
+    background-position: right;
+    background-repeat: no-repeat;
 }
 
-.tisso-announcement-button:hover{
-  background: #000;
-  color: #fff;
-  border-color: #000;
+.tisso-announcement-button:hover {
+    background-color: #000;
+    color: #fff;
+    border-color: #000;
+    background-size: 0 101%,101% 101%;
+    background-position: left;
+}
 
 .tisso-announcement-button span {
     font-size: 16px;

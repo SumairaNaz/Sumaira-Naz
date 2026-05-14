@@ -372,6 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentProduct = null;
   let selectedVariantId = null;
+
   let selectedColor = null;
   let selectedSize = null;
 
@@ -405,11 +406,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderPopup(product){
 
     popupImage.src = product.featured_image;
-    popupTitle.textContent = product.title;
+
+    popupTitle.innerHTML = product.title;
 
     popupDescription.innerHTML = product.description;
 
-    /* Default Variant */
     const firstVariant = product.variants[0];
 
     selectedVariantId = firstVariant.id;
@@ -417,118 +418,128 @@ document.addEventListener('DOMContentLoaded', () => {
     popupPrice.innerHTML = formatMoney(firstVariant.price);
 
     /* =========================
-       COLOR OPTIONS
+       RESET
     ========================= */
-const productOptions = product.options_with_values || [];
 
-/* =========================
-   COLOR OPTIONS
-========================= */
+    variantWrapper.innerHTML = '';
+    sizeWrapper.innerHTML = '';
 
-variantWrapper.innerHTML = '';
+    /* =========================
+       OPTIONS
+    ========================= */
 
-const colorOption = productOptions.find(
-  option => option.name.toLowerCase() === 'color'
-);
+    const options = product.options_with_values || [];
 
-if(colorOption){
+    const colorOption = options.find(
+      option => option.name.toLowerCase() === 'color'
+    );
 
-  selectedColor = colorOption.values[0];
+    const sizeOption = options.find(
+      option => option.name.toLowerCase() === 'size'
+    );
 
-  let colorHTML = `
-    <label class="tisso-option-title">
-      Color
-    </label>
+    /* =========================
+       COLOR BUTTONS
+    ========================= */
 
-    <div class="tisso-variant-options">
-  `;
+    if(colorOption){
 
-  colorOption.values.forEach((color, index) => {
+      selectedColor = colorOption.values[0];
 
-    colorHTML += `
-      <button
-        type="button"
-        class="tisso-variant-btn ${index === 0 ? 'active' : ''}"
-        data-color="${color}"
-      >
-        ${color}
-      </button>
-    `;
+      let colorHTML = `
+        <label class="tisso-option-title">
+          Color
+        </label>
 
-  });
+        <div class="tisso-variant-options">
+      `;
 
-  colorHTML += `</div>`;
+      colorOption.values.forEach((color, index) => {
 
-  variantWrapper.innerHTML = colorHTML;
+        colorHTML += `
+          <button
+            type="button"
+            class="tisso-variant-btn ${index === 0 ? 'active' : ''}"
+            data-color="${color}"
+          >
+            ${color}
+          </button>
+        `;
 
-  document.querySelectorAll('.tisso-variant-btn')
-  .forEach(btn => {
+      });
 
-    btn.addEventListener('click', () => {
+      colorHTML += `
+        </div>
+      `;
+
+      variantWrapper.innerHTML = colorHTML;
 
       document.querySelectorAll('.tisso-variant-btn')
-      .forEach(item => item.classList.remove('active'));
+      .forEach(btn => {
 
-      btn.classList.add('active');
+        btn.addEventListener('click', () => {
 
-      selectedColor = btn.dataset.color;
+          document.querySelectorAll('.tisso-variant-btn')
+          .forEach(item => item.classList.remove('active'));
 
-      updateVariant();
+          btn.classList.add('active');
 
-    });
+          selectedColor = btn.dataset.color;
 
-  });
+          updateVariant();
 
-}
+        });
 
-/* =========================
-   SIZE OPTIONS
-========================= */
+      });
 
-sizeWrapper.innerHTML = '';
+    }
 
-const sizeOption = productOptions.find(
-  option => option.name.toLowerCase() === 'size'
-);
+    /* =========================
+       SIZE DROPDOWN
+    ========================= */
 
-if(sizeOption){
+    if(sizeOption){
 
-  selectedSize = sizeOption.values[0];
+      selectedSize = sizeOption.values[0];
 
-  let sizeHTML = `
-    <label class="tisso-option-title">
-      Size
-    </label>
+      let sizeHTML = `
+        <label class="tisso-option-title">
+          Size
+        </label>
 
-    <select class="tisso-size-select">
-  `;
+        <select class="tisso-size-select">
+      `;
 
-  sizeOption.values.forEach(size => {
+      sizeOption.values.forEach(size => {
 
-    sizeHTML += `
-      <option value="${size}">
-        ${size}
-      </option>
-    `;
+        sizeHTML += `
+          <option value="${size}">
+            ${size}
+          </option>
+        `;
 
-  });
+      });
 
-  sizeHTML += `
-    </select>
-  `;
+      sizeHTML += `
+        </select>
+      `;
 
-  sizeWrapper.innerHTML = sizeHTML;
+      sizeWrapper.innerHTML = sizeHTML;
 
-  document.querySelector('.tisso-size-select')
-  .addEventListener('change', e => {
+      document.querySelector('.tisso-size-select')
+      .addEventListener('change', e => {
 
-    selectedSize = e.target.value;
+        selectedSize = e.target.value;
+
+        updateVariant();
+
+      });
+
+    }
 
     updateVariant();
 
-  });
-
-
+  }
 
   /* =========================
      UPDATE VARIANT
@@ -538,27 +549,38 @@ if(sizeOption){
 
     if(!currentProduct) return;
 
-    const matchedVariant = currentProduct.variants.find(variant => {
+    let matchedVariant = null;
 
-      const option1 = variant.option1;
-      const option2 = variant.option2;
+    matchedVariant = currentProduct.variants.find(variant => {
+
+      /* BOTH COLOR + SIZE */
 
       if(selectedColor && selectedSize){
 
         return (
-          option1 === selectedColor &&
-          option2 === selectedSize
+          variant.option1 === selectedColor &&
+          variant.option2 === selectedSize
         );
 
       }
 
+      /* ONLY COLOR */
+
       if(selectedColor){
 
-        return option1 === selectedColor;
+        return variant.option1 === selectedColor;
 
       }
 
-      return true;
+      /* ONLY SIZE */
+
+      if(selectedSize){
+
+        return variant.option1 === selectedSize;
+
+      }
+
+      return false;
 
     });
 
@@ -569,10 +591,6 @@ if(sizeOption){
       popupPrice.innerHTML = formatMoney(
         matchedVariant.price
       );
-
-      if(matchedVariant.featured_image){
-        popupImage.src = matchedVariant.featured_image.src;
-      }
 
     }
 
@@ -608,7 +626,7 @@ if(sizeOption){
       if(response.ok){
 
         addCartBtn.innerHTML = `
-          <span>ADDED TO CART</span>
+          <span>ADDED ✓</span>
         `;
 
         setTimeout(() => {
@@ -620,13 +638,13 @@ if(sizeOption){
 
           addCartBtn.disabled = false;
 
-        }, 2000);
+        },2000);
 
       }
 
     } catch(error){
 
-      console.error(error);
+      console.log(error);
 
       addCartBtn.disabled = false;
 
@@ -639,6 +657,7 @@ if(sizeOption){
   ========================= */
 
   closeBtn.addEventListener('click', closePopup);
+
   overlay.addEventListener('click', closePopup);
 
   function closePopup(){

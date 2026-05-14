@@ -419,107 +419,116 @@ document.addEventListener('DOMContentLoaded', () => {
     /* =========================
        COLOR OPTIONS
     ========================= */
+const productOptions = product.options_with_values || [];
 
-    variantWrapper.innerHTML = '';
+/* =========================
+   COLOR OPTIONS
+========================= */
 
-    const colorOption = product.options.find(
-      option => option.name.toLowerCase() === 'color'
-    );
+variantWrapper.innerHTML = '';
 
-    if(colorOption){
+const colorOption = productOptions.find(
+  option => option.name.toLowerCase() === 'color'
+);
 
-      selectedColor = colorOption.values[0];
+if(colorOption){
 
-      let colorHTML = `
-        <label class="tisso-option-title">Color</label>
-        <div class="tisso-variant-options">
-      `;
+  selectedColor = colorOption.values[0];
 
-      colorOption.values.forEach((color, index) => {
+  let colorHTML = `
+    <label class="tisso-option-title">
+      Color
+    </label>
 
-        colorHTML += `
-          <button
-            class="tisso-variant-btn ${index === 0 ? 'active' : ''}"
-            data-color="${color}"
-          >
-            ${color}
-          </button>
-        `;
+    <div class="tisso-variant-options">
+  `;
 
-      });
+  colorOption.values.forEach((color, index) => {
 
-      colorHTML += `</div>`;
+    colorHTML += `
+      <button
+        type="button"
+        class="tisso-variant-btn ${index === 0 ? 'active' : ''}"
+        data-color="${color}"
+      >
+        ${color}
+      </button>
+    `;
 
-      variantWrapper.innerHTML = colorHTML;
+  });
+
+  colorHTML += `</div>`;
+
+  variantWrapper.innerHTML = colorHTML;
+
+  document.querySelectorAll('.tisso-variant-btn')
+  .forEach(btn => {
+
+    btn.addEventListener('click', () => {
 
       document.querySelectorAll('.tisso-variant-btn')
-      .forEach(btn => {
+      .forEach(item => item.classList.remove('active'));
 
-        btn.addEventListener('click', () => {
+      btn.classList.add('active');
 
-          document.querySelectorAll('.tisso-variant-btn')
-          .forEach(item => item.classList.remove('active'));
+      selectedColor = btn.dataset.color;
 
-          btn.classList.add('active');
+      updateVariant();
 
-          selectedColor = btn.dataset.color;
+    });
 
-          updateVariant();
+  });
 
-        });
+}
 
-      });
+/* =========================
+   SIZE OPTIONS
+========================= */
 
-    }
+sizeWrapper.innerHTML = '';
 
-    /* =========================
-       SIZE DROPDOWN
-    ========================= */
+const sizeOption = productOptions.find(
+  option => option.name.toLowerCase() === 'size'
+);
 
-    const sizeOption = product.options.find(
-      option => option.name.toLowerCase() === 'size'
-    );
+if(sizeOption){
 
-    sizeWrapper.innerHTML = '';
+  selectedSize = sizeOption.values[0];
 
-    if(sizeOption){
+  let sizeHTML = `
+    <label class="tisso-option-title">
+      Size
+    </label>
 
-      selectedSize = sizeOption.values[0];
+    <select class="tisso-size-select">
+  `;
 
-      let sizeHTML = `
-        <label class="tisso-option-title">Size</label>
+  sizeOption.values.forEach(size => {
 
-        <select class="tisso-size-select">
-      `;
+    sizeHTML += `
+      <option value="${size}">
+        ${size}
+      </option>
+    `;
 
-      sizeOption.values.forEach(size => {
+  });
 
-        sizeHTML += `
-          <option value="${size}">
-            ${size}
-          </option>
-        `;
+  sizeHTML += `
+    </select>
+  `;
 
-      });
+  sizeWrapper.innerHTML = sizeHTML;
 
-      sizeHTML += `</select>`;
+  document.querySelector('.tisso-size-select')
+  .addEventListener('change', e => {
 
-      sizeWrapper.innerHTML = sizeHTML;
-
-      document.querySelector('.tisso-size-select')
-      .addEventListener('change', e => {
-
-        selectedSize = e.target.value;
-
-        updateVariant();
-
-      });
-
-    }
+    selectedSize = e.target.value;
 
     updateVariant();
 
-  }
+  });
+
+}
 
   /* =========================
      UPDATE VARIANT

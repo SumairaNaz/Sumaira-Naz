@@ -81,8 +81,8 @@
           "type": "product",
           "settings": {
             "product": "dark-denim-top",
-            "top": "",
-            "left": ""
+            "top": "39%",
+            "left": "74%"
           }
         }
       },
